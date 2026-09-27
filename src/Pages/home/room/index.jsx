@@ -26,8 +26,8 @@ const RoomPage = () => {
 
             if (meetingRef.current && roomId) {
                 try {
-                    const appID = Number(process.env.APP_ZEGO_APP_ID);
-                    const serverSecret = process.env.APP_ZEGO_SERVER_SECRET?.trim();
+                    const appID = Number(process.env.REACT_APP_ZEGO_APP_ID);
+                    const serverSecret = process.env.REACT_APP_ZEGO_SERVER_SECRET?.trim();
 
                     if (!appID || !serverSecret) {
                         console.error(
