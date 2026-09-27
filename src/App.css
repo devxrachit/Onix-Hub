@@ -1,6 +1,7 @@
-/* App.css - Complete styling for the video conference app */
+/* App.css - Modern black & white styling with animated background + modern type */
 
-/* Reset and base styles */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -12,22 +13,23 @@
   min-height: 100vh;
 }
 
-/* Override body styles if needed */
 html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #050505;
   overflow-x: hidden;
 }
 
-/* Animated background particles */
+h1, h2, h3, .music-btn {
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+}
+
+/* Soft monochrome ambient glow */
 body::before {
   content: '';
   position: fixed;
@@ -35,11 +37,11 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
-  animation: float 20s ease-in-out infinite;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.04) 0%, transparent 55%);
+  animation: float 24s ease-in-out infinite;
   z-index: -1;
   pointer-events: none;
 }
@@ -50,7 +52,10 @@ body::before {
   66% { transform: translateY(-20px) rotate(-2deg); }
 }
 
-/* Home Page Styles */
+/* ---------------------------------------------------------
+   Home Page
+   --------------------------------------------------------- */
+
 .home-page {
   display: flex;
   align-items: center;
@@ -58,59 +63,115 @@ body::before {
   min-height: 100vh;
   padding: 20px;
   position: relative;
+  background: #050505;
+  overflow: hidden;
 }
 
+/* Animated mesh gradient — slowly drifts across the whole viewport (layer 0) */
 .home-page::before {
   content: '';
   position: absolute;
-  top: 10%;
-  left: -10%;
-  width: 200px;
-  height: 200px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  animation: pulse 4s ease-in-out infinite;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.14) 0%, transparent 48%),
+    radial-gradient(circle at 30% 85%, rgba(255, 255, 255, 0.16) 0%, transparent 46%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 48%);
+  background-size: 180% 180%;
+  animation: meshDrift 22s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
 }
 
+@keyframes meshDrift {
+  0%   { background-position: 0% 0%, 100% 0%, 0% 100%, 100% 100%; transform: rotate(0deg) scale(1); }
+  50%  { background-position: 30% 20%, 70% 30%, 20% 70%, 80% 80%; transform: rotate(3deg) scale(1.06); }
+  100% { background-position: 0% 0%, 100% 0%, 0% 100%, 100% 100%; transform: rotate(0deg) scale(1); }
+}
+
+/* Fine drifting grid lines for a "modern tech" feel (layer 2, above particles) */
 .home-page::after {
   content: '';
   position: absolute;
-  bottom: 10%;
-  right: -10%;
-  width: 150px;
-  height: 150px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 50%;
-  animation: pulse 6s ease-in-out infinite reverse;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at 50% 40%, black 0%, transparent 90%);
+  -webkit-mask-image: radial-gradient(circle at 50% 40%, black 0%, transparent 90%);
+  animation: gridPan 40s linear infinite;
+  z-index: 2;
+  pointer-events: none;
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.3; }
-  50% { transform: scale(1.1) rotate(180deg); opacity: 0.6; }
+@keyframes gridPan {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 56px 56px, 56px 56px; }
+}
+
+/* Floating particles — pure CSS, layered dots drifting upward at different speeds (layer 1) */
+.home-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.home-particles span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.5);
+  animation: particleRise linear infinite;
+}
+
+.home-particles span:nth-child(1)  { left: 8%;  width: 4px; height: 4px; animation-duration: 12s; animation-delay: 0s; }
+.home-particles span:nth-child(2)  { left: 18%; width: 6px; height: 6px; animation-duration: 15s; animation-delay: 1.5s; }
+.home-particles span:nth-child(3)  { left: 27%; width: 4px; height: 4px; animation-duration: 10s; animation-delay: 3s; }
+.home-particles span:nth-child(4)  { left: 39%; width: 7px; height: 7px; animation-duration: 17s; animation-delay: 0.8s; }
+.home-particles span:nth-child(5)  { left: 48%; width: 4px; height: 4px; animation-duration: 13s; animation-delay: 4.5s; }
+.home-particles span:nth-child(6)  { left: 58%; width: 6px; height: 6px; animation-duration: 19s; animation-delay: 2.2s; }
+.home-particles span:nth-child(7)  { left: 67%; width: 4px; height: 4px; animation-duration: 14s; animation-delay: 3.8s; }
+.home-particles span:nth-child(8)  { left: 76%; width: 6px; height: 6px; animation-duration: 16s; animation-delay: 0.3s; }
+.home-particles span:nth-child(9)  { left: 85%; width: 4px; height: 4px; animation-duration: 11s; animation-delay: 5s; }
+.home-particles span:nth-child(10) { left: 93%; width: 7px; height: 7px; animation-duration: 18s; animation-delay: 1.8s; }
+
+@keyframes particleRise {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  10%  { opacity: 0.9; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-110vh) translateX(24px); opacity: 0; }
 }
 
 .home-page .form {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 24px;
   padding: 60px 40px;
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    0 1px 0px rgba(255, 255, 255, 0.4) inset;
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.6),
+    0 1px 0px rgba(255, 255, 255, 0.06) inset;
   max-width: 450px;
   width: 100%;
   text-align: center;
   position: relative;
   overflow: hidden;
+  z-index: 3;
   animation: slideUp 0.8s ease-out;
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(50px) scale(0.9);
+    transform: translateY(50px) scale(0.95);
   }
   to {
     opacity: 1;
@@ -125,8 +186,8 @@ body::before {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: shimmer 3s infinite;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  animation: shimmer 4s infinite;
 }
 
 @keyframes shimmer {
@@ -140,79 +201,102 @@ body::before {
 }
 
 .home-page .form h1 {
-  color: white;
-  font-size: 2.5rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.7rem;
   font-weight: 700;
-  margin-bottom: 10px;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin-bottom: 12px;
   letter-spacing: -1px;
+  background: linear-gradient(120deg, #ffffff 0%, #b0b0b0 45%, #ffffff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: textShine 6s ease-in-out infinite;
+}
+
+@keyframes textShine {
+  0%, 100% { background-position: 0% center; }
+  50%      { background-position: 100% center; }
 }
 
 .home-page .form p {
-  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Inter', sans-serif;
+  color: rgba(255, 255, 255, 0.55);
   margin-bottom: 40px;
-  font-size: 1.1rem;
-  line-height: 1.5;
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.6;
 }
 
 .home-page .form label {
   display: block;
-  color: white;
-  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
   font-weight: 600;
   margin-bottom: 12px;
   text-align: left;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .home-page .form input[type="text"] {
   width: 100%;
   padding: 18px 24px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: white;
-  font-size: 1.1rem;
+  color: #ffffff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
   font-weight: 500;
+  letter-spacing: 0.02em;
   margin-bottom: 30px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   outline: none;
 }
 
 .home-page .form input[type="text"]::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.35);
   font-weight: 400;
 }
 
 .home-page .form input[type="text"]:focus {
   border-color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
   transform: translateY(-2px);
-  box-shadow: 
-    0 10px 25px rgba(0, 0, 0, 0.1),
-    0 0 0 4px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.3),
+    0 0 0 4px rgba(255, 255, 255, 0.06);
 }
 
 .home-page .form button {
   width: 100%;
   padding: 18px 24px;
-  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  background: #ffffff;
   border: none;
   border-radius: 16px;
-  color: white;
-  font-size: 1.2rem;
+  color: #050505;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 
-    0 8px 20px rgba(255, 107, 107, 0.4),
-    0 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1.5px;
+  box-shadow:
+    0 8px 24px rgba(255, 255, 255, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
+  animation: buttonPulse 3.5s ease-in-out infinite;
+}
+
+@keyframes buttonPulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15), 0 2px 4px rgba(0, 0, 0, 0.2); }
+  50%      { box-shadow: 0 8px 30px rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2); }
 }
 
 .home-page .form button::before {
@@ -222,16 +306,17 @@ body::before {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.08), transparent);
   transition: left 0.6s;
 }
 
 .home-page .form button:hover {
   transform: translateY(-3px);
-  box-shadow: 
-    0 12px 30px rgba(255, 107, 107, 0.5),
-    0 4px 8px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(135deg, #ff5252, #f44336);
+  background: #f0f0f0;
+  animation-play-state: paused;
+  box-shadow:
+    0 14px 34px rgba(255, 255, 255, 0.22),
+    0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .home-page .form button:hover::before {
@@ -243,17 +328,53 @@ body::before {
 }
 
 .home-page .form button:disabled {
-  opacity: 0.7;
+  opacity: 0.4;
   cursor: not-allowed;
   transform: none;
-  background: rgba(255, 107, 107, 0.5);
+  animation: none;
+  background: rgba(255, 255, 255, 0.5);
 }
 
-/* Room Page Styles */
+/* Music controls */
+.music-controls {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 10px 16px;
+  z-index: 20;
+}
+
+.music-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
+
+.volume-slider {
+  width: 90px;
+  accent-color: #ffffff;
+}
+
+/* ---------------------------------------------------------
+   Room Page
+   --------------------------------------------------------- */
+
 .room-page {
   width: 100vw;
   height: 100vh;
-  background: #0a0a0a;
+  background: #050505;
   position: relative;
   overflow: hidden;
 }
@@ -265,10 +386,10 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, 
-    rgba(29, 78, 216, 0.05) 0%, 
-    rgba(147, 51, 234, 0.05) 50%, 
-    rgba(239, 68, 68, 0.05) 100%);
+  background: linear-gradient(45deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.015) 50%,
+    rgba(255, 255, 255, 0.03) 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -281,7 +402,6 @@ body::before {
   border-radius: 0;
 }
 
-/* Loading animation for room */
 .room-page .loading {
   position: absolute;
   top: 50%;
@@ -289,6 +409,7 @@ body::before {
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
+  font-family: 'Space Grotesk', sans-serif;
   z-index: 10;
 }
 
@@ -296,7 +417,7 @@ body::before {
   width: 50px;
   height: 50px;
   border: 4px solid rgba(255, 255, 255, 0.1);
-  border-top: 4px solid #ff6b6b;
+  border-top: 4px solid #ffffff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 20px;
@@ -307,14 +428,28 @@ body::before {
   100% { transform: rotate(360deg); }
 }
 
-/* Fallback for browsers that don't support backdrop-filter */
-@supports not (backdrop-filter: blur(20px)) {
+@supports not (backdrop-filter: blur(24px)) {
   .home-page .form {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(20, 20, 20, 0.9);
   }
-  
+
   .home-page .form input[type="text"] {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  .home-page::before,
+  .home-page::after,
+  .home-page .form,
+  .home-page .form::before,
+  .home-page .form h1,
+  .home-page .form button,
+  .home-particles span,
+  .room-page .loading .spinner {
+    animation: none !important;
   }
 }
 
@@ -325,19 +460,19 @@ body::before {
     margin: 20px;
     max-width: none;
   }
-  
+
   .home-page .form h1 {
     font-size: 2rem;
   }
-  
+
   .home-page .form input[type="text"],
   .home-page .form button {
     padding: 16px 20px;
     font-size: 1rem;
   }
-  
+
   .home-page .form button {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 }
 
@@ -345,23 +480,29 @@ body::before {
   .home-page {
     padding: 15px;
   }
-  
+
   .home-page .form {
     padding: 30px 20px;
   }
-  
+
   .home-page .form h1 {
     font-size: 1.8rem;
   }
-  
+
   .home-page .form p {
     font-size: 1rem;
     margin-bottom: 30px;
   }
-  
+
   .home-page .form input[type="text"],
   .home-page .form button {
     padding: 14px 18px;
+  }
+
+  .music-controls {
+    top: 12px;
+    right: 12px;
+    padding: 8px 12px;
   }
 }
 
@@ -371,19 +512,19 @@ body::before {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.35);
 }
 
-/* Additional utility classes */
+/* Utility classes */
 .fade-in {
   animation: fadeIn 0.5s ease-in;
 }
@@ -410,12 +551,12 @@ body::before {
 
 /* Error states */
 .home-page .form input[type="text"].error {
-  border-color: #ff6b6b;
-  background: rgba(255, 107, 107, 0.1);
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .home-page .form .error-message {
-  color: #ff6b6b;
+  color: #ffffff;
   font-size: 0.9rem;
   margin-top: -20px;
   margin-bottom: 20px;

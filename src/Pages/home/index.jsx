@@ -124,6 +124,11 @@ const HomePage = () => {
 
     return (
         <div className="home-page">
+            <div className="home-particles" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+        
             {/* Background Music */}
             <audio
                 ref={audioRef}
@@ -188,7 +193,7 @@ const HomePage = () => {
 
             <form onSubmit={handleFormSubmit} className="form">
                 <div className="form-group">
-                    <h1>VideoConnect</h1>
+                    <h1>ONIX HUB</h1>
                     <p>Connect with anyone, anywhere. Enter a room code to join or create a new video conference.</p>
                     
                     <div className="form-field">
